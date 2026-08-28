@@ -25,7 +25,7 @@ table{width:100%;border-collapse:collapse}td,th{padding:9px;border-bottom:1px so
 </section></main>
 <script>
 let R={}, names={USD:"دولار أمريكي",EUR:"يورو",JOD:"دينار أردني",SAR:"ريال سعودي",AED:"درهم إماراتي",GBP:"جنيه إسترليني",KWD:"دينار كويتي",TRY:"ليرة تركية"};
-async function load(){R=await (await fetch("/api/rates")).json();fill();} function fill(){from.innerHTML=to.innerHTML="";for(let c in R){from.innerHTML+=`<option>${c}</option>`;to.innerHTML+=`<option>${c}</option>`}from.value="JOD";to.value="USD"}
+ function load(){function fill(){from.innerHTML=to.innerHTML="";for(let c in R){from.innerHTML+=`<option>${c}</option>`;to.innerHTML+=`<option>${c}</option>`}from.value="JOD";to.value="USD"}
 function convert(){let a=+amount.value||0,v=a/R[from.value]*R[to.value];cres.textContent=`${a} ${from.value} = ${v.toFixed(2)} ${to.value}`}
 function tab(id){document.querySelectorAll("main section").forEach(x=>x.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
 function age(){let b=new Date(birth.value+"T00:00:00"),n=new Date(),y=n.getFullYear()-b.getFullYear(),m=n.getMonth()-b.getMonth(),d=n.getDate()-b.getDate();if(d<0){m--;d+=new Date(n.getFullYear(),n.getMonth(),0).getDate()}if(m<0){y--;m+=12}ares.textContent=`عمرك ${y} سنة و${m} شهر و${d} يوم`}
@@ -34,5 +34,5 @@ let exp="";function p(x){exp+=x;screen.value=exp}function eq(){try{if(!/^[0-9+\\
 async function login(){let r=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:user.value,password:pass.value})});if(r.ok){loginBox();}else msg.textContent="بيانات الدخول غير صحيحة"}
 function loginBox(){login.classList.add("hidden");panel.classList.remove("hidden");renderRates()}function renderRates(){rates.innerHTML=Object.entries(R).map(([c,v])=>`<p><b>${c}</b> <input data-c="${c}" type="number" step="0.000001" value="${v}"></p>`).join("")}
 async function saveRates(){let o={};document.querySelectorAll("#rates input").forEach(i=>o[i.dataset.c]=i.value);let r=await fetch("/api/rates",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)});if(r.ok){R=(await r.json()).rates;fill();alert("تم حفظ الأسعار")}else alert("فشل الحفظ")}
-async function logout(){await fetch("/api/logout",{method:"POST"});location.reload()}load();
+async function logout(){await fetch("/api/logout",{method:"POST"});location.reload()
 </script></body></html>
